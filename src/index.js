@@ -53,8 +53,8 @@ class Project extends React.Component {
     render() {
         return (
             <div className="project">
-                <p>id: {this.props.id}</p>
-                <p>index: {this.props.index}</p>
+                <p className="debug">id: {this.props.id}</p>
+                <p className="debug">index: {this.props.index}</p>
                 <label>
                     Project
                     <input
@@ -71,6 +71,7 @@ class Project extends React.Component {
                         step="any"
                         value={this.props.hoursAllotted}
                         onChange={this.props.onHoursAllottedChange}
+                        onWheel={(e) => e.target.blur()}
                     />    
                 </label>
                 <label>
@@ -80,12 +81,13 @@ class Project extends React.Component {
                         step="any"
                         value={this.props.hoursWorked}
                         onChange={this.props.onHoursWorkedChange}
+                        onWheel={(e) => e.target.blur()}
                     />
                 </label>
                 <p>{this.hoursLeft} hours left</p>
                 <p>{this.printPacingDifference}</p>
                 <p>Average <span className="red">{this.hoursToPace}</span>  hours a day</p>
-                <button onClick={this.props.onDeleteProject}>Delete Project</button>
+                <button className="critical" sonClick={this.props.onDeleteProject}>Delete Project</button>
                 
             </div>
         );
@@ -131,7 +133,8 @@ class Month extends React.Component {
     handleChange(e, property) {
         this.setState({
             [property]: e.target.value,
-        });
+            
+        }, () => localStorage.setItem("month", JSON.stringify(this.state)));
     }
     handleNameChange(e, i) {
         let updatedProjects = this.state.projects.slice()
@@ -218,12 +221,12 @@ class Month extends React.Component {
         });
 
         return (
-            <>
+            <div className="month">
                 <p>
                     March
                 </p>
                 <form>
-                    <label htmlFor="workdays">
+                    <label>
                         Workdays
                         <input
                             type="number"
@@ -232,9 +235,10 @@ class Month extends React.Component {
                             onChange={(e, property) =>
                                 this.handleChange(e, "workdays")
                             }
+                            onWheel={(e) => e.target.blur()}
                         />
                     </label>
-                    <label htmlFor="days-worked">
+                    <label>
                         Days Worked
                         <input
                             type="number"
@@ -243,6 +247,7 @@ class Month extends React.Component {
                             onChange={(e, property) =>
                                 this.handleChange(e, "daysWorked")
                             }
+                            onWheel={(e) => e.target.blur()}
                         />
                     </label>
                 </form>
@@ -251,9 +256,12 @@ class Month extends React.Component {
 
                 <hr />
                 <p>Projects:</p>
-                {projects}
-                <button onClick={e => this.createProject()}>Create Project</button>
-            </>
+                <div className="projects">
+                    {projects}    
+                </div>
+                
+                <button onClick={e => this.createProject()}> + Create Project</button>
+            </div>
         );
     }
 }

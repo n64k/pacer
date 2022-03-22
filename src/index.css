@@ -4,12 +4,28 @@
   --text: #000;
   --critical: #b00;
   --border: 3px solid var(--text);
+  --padding: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111;
+    --bg-dark: #888;
+    --text: #BBB;
+    --critical: #d00;
+    --border: 3px solid var(--text);
+    --padding: 2rem;
+  }
 }
 
 body {
   background-color: var(--bg);
   font-size: 20px;
   color: var(--text)
+}
+
+input {
+  color: var(--text);
 }
 
 body * {
@@ -42,12 +58,13 @@ input[type="number"]:focus {
   background-color: var(--bg)
 }
 
-button {
+button { 
   padding: 1em;
   font-size: 1rem;
   font-weight: bold;
   text-transform: uppercase;
   border: var(--border);
+  color: var(--text);
   background-color: transparent;
   /* letter-spacing: 1px; */
 }
@@ -82,24 +99,31 @@ label * {
   color: var(--critical)
 }
 
+.pl {
+  padding-left: var(--padding)
+}
 
 .month {
   max-width: 40rem;
-  margin: auto
+  margin: auto;
+  padding-bottom: 4rem;
 }
-
-.projects {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 1rem;
   
-}
+  .month-info {
+    padding: var(--padding);
+  }
 
-.project {
-  padding: 2rem;
-  border: var(--border);
-}
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+    .project {
+      padding: var(--padding);
+      border: var(--border);
+    }
 
 input {
   margin-bottom: 2rem;

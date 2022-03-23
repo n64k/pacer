@@ -30,6 +30,7 @@ input {
 
 body * {
   font-family: monospace;
+  box-sizing: border-box;
   /* font-family: 'MD IO 0.4', Menlo, monospace */
   /* font-family: 'IBM Plex Mono', Menlo, monospace */
 }
@@ -121,9 +122,20 @@ label * {
   }
   
     .project {
+      position: relative;
       padding: var(--padding);
       border: var(--border);
     }
+    
+      .next-prev {
+        position: absolute;
+        top: 1rem;
+        right: 1rem; 
+      }
+      
+      .next-prev button {
+        
+      }
 
 input {
   margin-bottom: 2rem;

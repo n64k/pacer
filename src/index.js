@@ -7,8 +7,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 
-function round(number, places) {
-    return parseFloat(number.toFixed(2), 10);
+function round(number, places = 2) {
+    return parseFloat(number.toFixed(places), 10);
 }
 function printMonth() {
     const month = [
@@ -29,6 +29,45 @@ function printMonth() {
     let name = month[d.getMonth()];
     return name;
 }
+
+function moveUp(array, indexOfElementToMove) {
+    let indexToMove = indexOfElementToMove
+    if (indexToMove === 0 ) {
+        console.log("Already at top")
+        return array
+    }
+    
+    let valueToMove = array[indexToMove]
+    let valueAbove = array[indexToMove - 1]
+    
+    let newArray = [...array]
+    newArray[indexToMove - 1] = valueToMove
+    newArray[indexToMove] = valueAbove
+
+    {/* console.log(newArray) */}
+    return newArray
+}
+
+function moveDown(array, indexOfElementToMove) {
+    let indexToMove = indexOfElementToMove
+    if (indexToMove === array.length - 1) {
+        console.log("Already at top")
+        return array
+    }
+    
+    let valueToMove = array[indexToMove]
+    let valueBelow = array[indexToMove + 1]
+    
+    let newArray = [...array]
+    newArray[indexToMove + 1] = valueToMove
+    newArray[indexToMove] = valueBelow
+
+    {/* console.log(newArray) */}
+    return newArray
+}
+
+// Again, should this mutate the array,
+// or return a new array
 
 class Project extends React.Component {
     get hoursLeft() {
@@ -53,6 +92,11 @@ class Project extends React.Component {
     render() {
         return (
             <div className="project">
+                <div className="next-prev">
+                    <button onClick={this.props.onMoveProjectUp}>▲</button> 
+                    <button onClick={this.props.onMoveProjectDown}>▼</button>
+                </div>
+                
                 <p className="debug">id: {this.props.id}</p>
                 <p className="debug">index: {this.props.index}</p>
                 <label>
@@ -84,10 +128,10 @@ class Project extends React.Component {
                         onWheel={(e) => e.target.blur()}
                     />
                 </label>
-                <p>{this.hoursLeft} hours left</p>
+                <p>{round(this.hoursLeft)} hours left</p>
                 <p>{this.printPacingDifference}</p>
-                <p>Average <span className="red">{this.hoursToPace}</span>  hours a day</p>
-                <button className="critical" sonClick={this.props.onDeleteProject}>Delete Project</button>
+                <p>Average <span className="red">{this.hoursToPace}</span>  hours a day to finish on time</p>
+                <button className="critical" onClick={this.props.onDeleteProject}>Delete Project</button>
                 
             </div>
         );
@@ -123,7 +167,6 @@ class Month extends React.Component {
             projects: month.projects,
         };
         localStorage.setItem("month", JSON.stringify(month));
-        console.log(this.state.projects)
     }
     
     get daysLeft() {
@@ -161,14 +204,35 @@ class Month extends React.Component {
         )
     }
     
-    createProject() {
+    // TODO
+    handleMoveProjectUp(i) {
         let updatedProjects = [...this.state.projects]
-        updatedProjects.push({
-                name: "Untitled Project",
-                hoursAllotted: 100,
-                hoursWorked: 5,
-                id: Math.random()
-            })
+        updatedProjects = moveUp(updatedProjects, i)
+        console.log("index to move is " + i)
+        console.log(updatedProjects)
+        this.setState(
+            {projects: updatedProjects},
+            () => localStorage.setItem("month", JSON.stringify(this.state))
+        )
+    }
+    handleMoveProjectDown(i) {
+        let updatedProjects = [...this.state.projects]
+        updatedProjects = moveDown(updatedProjects, i)
+        console.log("index to move is " + i)
+        console.log(updatedProjects)
+        this.setState(
+            {projects: updatedProjects},
+            () => localStorage.setItem("month", JSON.stringify(this.state))
+        )
+    }
+    
+    createProject() {
+        let updatedProjects = [...this.state.projects, {
+            name: "Untitled Project",
+            hoursAllotted: 100,
+            hoursWorked: 5,
+            id: Math.random()
+        }]
         this.setState(
             {projects: updatedProjects},
             () => localStorage.setItem("month", JSON.stringify(this.state))
@@ -208,6 +272,12 @@ class Month extends React.Component {
                 onHoursWorkedChange={(e) => {
                     this.handleHoursWorkedChange(e, i)
                 }}
+                onMoveProjectUp={(e) => {
+                    this.handleMoveProjectUp(i)
+                }}
+                onMoveProjectDown={(e) => {
+                    this.handleMoveProjectDown(i)
+                }}
                 onDeleteProject={(e) => {
                     this.handleDeleteProject(e, i)
                 }}
@@ -222,10 +292,10 @@ class Month extends React.Component {
 
         return (
             <div className="month">
-                <p>
-                    March
-                </p>
-                <form>
+                <form className="month-info">
+                    <p>
+                        March
+                    </p>
                     <label>
                         Workdays
                         <input
@@ -250,13 +320,12 @@ class Month extends React.Component {
                             onWheel={(e) => e.target.blur()}
                         />
                     </label>
+                    <p>{this.daysLeft} Workdays left</p>
                 </form>
-
-                <p>{this.daysLeft} Workdays left</p>
-
                 <hr />
-                <p>Projects:</p>
+
                 <div className="projects">
+                    <p className="pl">Projects:</p>
                     {projects}    
                 </div>
                 

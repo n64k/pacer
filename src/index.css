@@ -29,14 +29,15 @@ input {
 }
 
 body * {
-  font-family: monospace;
+  font-family: Menlo, monospace;
   box-sizing: border-box;
   /* font-family: 'MD IO 0.4', Menlo, monospace */
   /* font-family: 'IBM Plex Mono', Menlo, monospace */
 }
 
 hr {
-  border: 1.5px solid var(--text)
+  border: 1.5px solid var(--text);
+  background-color: var(--text);
 }
 
 label {
@@ -129,6 +130,9 @@ label * {
     
       .next-prev {
         position: absolute;
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
         top: 1rem;
         right: 1rem; 
       }
@@ -136,6 +140,16 @@ label * {
       .next-prev button {
         
       }
+      
+      .create-project {
+        width: 100%;
+        transition: padding 250ms ease-in
+      }
+      
+        .create-project:hover {
+          padding: 2rem 1rem;
+          transition: padding 125ms ease-out
+        }
 
 input {
   margin-bottom: 2rem;

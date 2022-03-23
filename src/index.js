@@ -1,6 +1,6 @@
 /*
-- Disable scroll to change value of field
-
+TODO
+- Flash of color to call out something that has re-ordered
 */
 
 import React from "react";
@@ -30,6 +30,8 @@ function printMonth() {
     return name;
 }
 
+// Again, should these mutate the array,
+// or return a new array
 function moveUp(array, indexOfElementToMove) {
     let indexToMove = indexOfElementToMove
     if (indexToMove === 0 ) {
@@ -47,7 +49,6 @@ function moveUp(array, indexOfElementToMove) {
     {/* console.log(newArray) */}
     return newArray
 }
-
 function moveDown(array, indexOfElementToMove) {
     let indexToMove = indexOfElementToMove
     if (indexToMove === array.length - 1) {
@@ -66,13 +67,28 @@ function moveDown(array, indexOfElementToMove) {
     return newArray
 }
 
-// Again, should this mutate the array,
-// or return a new array
+
 
 class Project extends React.Component {
     get hoursLeft() {
         return this.props.hoursAllotted - this.props.hoursWorked
     }
+    printHoursLeft() {
+        if (this.hoursLeft > 0) {
+            return(
+                <p>{round(this.hoursLeft)} hours left</p>
+            )
+        } else {
+            return(
+                <p>
+                    You're <span className="red">{Math.abs(round(this.hoursLeft))} hours over</span>
+                    <br/>
+                    Maybe reach out to a PM
+                </p>
+            )
+        }
+    }
+    
     get hoursToPace() {
         return round(this.hoursLeft / this.props.daysLeft)
     }
@@ -82,13 +98,23 @@ class Project extends React.Component {
         let difference = this.props.hoursWorked - target
         return difference
     }
-    get printPacingDifference() {
+    printPacingDifference() {
+        if (this.hoursLeft <= 0 ) { return }
+        
         if (this.pacingDifference > 0 ) {
-            return`You're ${round(this.pacingDifference)} hours ahead`
+            return(<p>{`You're ${round(this.pacingDifference)} hours ahead`}</p>)
         } else {
-            return `Your're ${round(Math.abs(this.pacingDifference))} hours behind`
+            return <p>{`Your're ${round(Math.abs(this.pacingDifference))} hours behind`}</p>
         }   
     }
+    
+    printHoursToPace() {
+        if (this.hoursLeft <= 0 ) { return }
+        return(
+            <p>Average <span className="red">{this.hoursToPace}</span>  hours a day to finish on time</p>
+        )
+    }
+    
     render() {
         return (
             <div className="project">
@@ -128,11 +154,13 @@ class Project extends React.Component {
                         onWheel={(e) => e.target.blur()}
                     />
                 </label>
-                <p>{round(this.hoursLeft)} hours left</p>
-                <p>{this.printPacingDifference}</p>
-                <p>Average <span className="red">{this.hoursToPace}</span>  hours a day to finish on time</p>
-                <button className="critical" onClick={this.props.onDeleteProject}>Delete Project</button>
+                {/* <p>{round(this.hoursLeft)} hours left</p> */}
+                {this.printHoursLeft()}
+                {/* <p>{this.printPacingDifference}</p> */}
+                {this.printPacingDifference()}
+                {this.printHoursToPace()}
                 
+                <button className="critical" onClick={this.props.onDeleteProject}>Delete Project</button>
             </div>
         );
     }
@@ -329,7 +357,7 @@ class Month extends React.Component {
                     {projects}    
                 </div>
                 
-                <button onClick={e => this.createProject()}> + Create Project</button>
+                <button className="create-project" onClick={e => this.createProject()}> + Create Project</button>
             </div>
         );
     }

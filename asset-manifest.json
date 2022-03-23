@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/pacer/static/css/main.c75d2597.css",
-    "main.js": "/pacer/static/js/main.c39642bb.js",
+    "main.css": "/pacer/static/css/main.bfc7c47c.css",
+    "main.js": "/pacer/static/js/main.abbb7ac6.js",
     "index.html": "/pacer/index.html",
-    "main.c75d2597.css.map": "/pacer/static/css/main.c75d2597.css.map",
-    "main.c39642bb.js.map": "/pacer/static/js/main.c39642bb.js.map"
+    "main.bfc7c47c.css.map": "/pacer/static/css/main.bfc7c47c.css.map",
+    "main.abbb7ac6.js.map": "/pacer/static/js/main.abbb7ac6.js.map"
   },
   "entrypoints": [
-    "static/css/main.c75d2597.css",
-    "static/js/main.c39642bb.js"
+    "static/css/main.bfc7c47c.css",
+    "static/js/main.abbb7ac6.js"
   ]
 }

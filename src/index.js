@@ -46,7 +46,6 @@ function moveUp(array, indexOfElementToMove) {
     newArray[indexToMove - 1] = valueToMove
     newArray[indexToMove] = valueAbove
 
-    {/* console.log(newArray) */}
     return newArray
 }
 function moveDown(array, indexOfElementToMove) {
@@ -63,7 +62,6 @@ function moveDown(array, indexOfElementToMove) {
     newArray[indexToMove + 1] = valueToMove
     newArray[indexToMove] = valueBelow
 
-    {/* console.log(newArray) */}
     return newArray
 }
 
@@ -89,9 +87,6 @@ class Project extends React.Component {
         }
     }
     
-    get hoursToPace() {
-        return round(this.hoursLeft / this.props.daysLeft)
-    }
     get pacingDifference() {
         let dailyHoursTarget = this.props.hoursAllotted / this.props.workdays
         let target = dailyHoursTarget * this.props.daysWorked
@@ -108,6 +103,9 @@ class Project extends React.Component {
         }   
     }
     
+    get hoursToPace() {
+        return round(this.hoursLeft / this.props.daysLeft)
+    }
     printHoursToPace() {
         if (this.hoursLeft <= 0 ) { return }
         return(
@@ -122,9 +120,6 @@ class Project extends React.Component {
                     <button onClick={this.props.onMoveProjectUp}>▲</button> 
                     <button onClick={this.props.onMoveProjectDown}>▼</button>
                 </div>
-                
-                <p className="debug">id: {this.props.id}</p>
-                <p className="debug">index: {this.props.index}</p>
                 <label>
                     Project
                     <input
@@ -232,7 +227,6 @@ class Month extends React.Component {
         )
     }
     
-    // TODO
     handleMoveProjectUp(i) {
         let updatedProjects = [...this.state.projects]
         updatedProjects = moveUp(updatedProjects, i)
@@ -279,14 +273,12 @@ class Month extends React.Component {
     renderProject(i) {
         return(
             <Project
+                key={this.state.projects[i].id}
+                id={this.state.projects[i].id}
                 name={this.state.projects[i].name}
                 onNameChange={(e) => {
                     this.handleNameChange(e, i)
                 }}
-                // key={i}
-                key={this.state.projects[i].id}
-                id={this.state.projects[i].id}
-                index={i}
                 workdays={this.state.workdays}
                 daysWorked={this.state.daysWorked}
                 daysLeft={this.daysLeft}
@@ -351,23 +343,14 @@ class Month extends React.Component {
                     <p>{this.daysLeft} Workdays left</p>
                 </form>
                 <hr />
-
                 <div className="projects">
                     <p className="pl">Projects:</p>
                     {projects}    
                 </div>
-                
                 <button className="create-project" onClick={e => this.createProject()}> + Create Project</button>
             </div>
         );
     }
-}
-
-{
-    /* ReactDOM.render(
-    <Project />,
-    document.getElementById("root")
-) */
 }
 
 ReactDOM.render(<Month />, document.getElementById("root"));

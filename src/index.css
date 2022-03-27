@@ -1,10 +1,13 @@
 :root {
   --bg: #fff;
   --bg-dark: #888;
+  
   --text: #000;
+  --text-light: #888;
   --critical: #b00;
-  --border: 3px solid var(--text);
+  --border: 2px solid var(--text-light);
   --padding: 2rem;
+  --text-size: 18px
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,7 +23,7 @@
 
 body {
   background-color: var(--bg);
-  font-size: 20px;
+  font-size: var(--text-size);
   color: var(--text)
 }
 
@@ -50,7 +53,7 @@ input:focus{
 input[type="text"],
 input[type="number"] {
   padding: 0.5em;
-  font-size: 20px;
+  font-size: var(--text-size);
   border: var(--border);
   background-color: transparent;
 }
@@ -76,13 +79,13 @@ button:hover {
 }
 
 button.critical:hover {
-  border: 3px solid var(--critical);
+  border: 2px solid var(--critical);
   background-color: var(--critical)
 }
 
 form * {
   display: block;
-}
+} 
 
 label * {
   display: block;

@@ -1,5 +1,6 @@
 /*
 TODO
+- Make sure numbers are in fact numbers and not strings
 - Flash of color to call out something that has re-ordered
 */
 
@@ -65,11 +66,9 @@ function moveDown(array, indexOfElementToMove) {
     return newArray
 }
 
-
-
 class Project extends React.Component {
     get hoursLeft() {
-        return this.props.hoursAllotted - this.props.hoursWorked
+        return this.props.hoursallocated - this.props.hoursWorked
     }
     printHoursLeft() {
         if (this.hoursLeft > 0) {
@@ -88,7 +87,7 @@ class Project extends React.Component {
     }
     
     get pacingDifference() {
-        let dailyHoursTarget = this.props.hoursAllotted / this.props.workdays
+        let dailyHoursTarget = this.props.hoursallocated / this.props.workdays
         let target = dailyHoursTarget * this.props.daysWorked
         let difference = this.props.hoursWorked - target
         return difference
@@ -130,12 +129,12 @@ class Project extends React.Component {
                     />    
                 </label>
                 <label>
-                    Hours allotted
+                    Hours allocated
                     <input
                         type="number"
                         step="any"
-                        value={this.props.hoursAllotted}
-                        onChange={this.props.onHoursAllottedChange}
+                        value={this.props.hoursallocated}
+                        onChange={this.props.onHoursallocatedChange}
                         onWheel={(e) => e.target.blur()}
                     />    
                 </label>
@@ -166,7 +165,7 @@ class Month extends React.Component {
         super(props);
         this.emptyProjectTemplate = {
             name: "Untitled Project",
-            hoursAllotted: 100,
+            hoursallocated: 100,
             hoursWorked: 5,
             get id() {
                 return Math.random()
@@ -191,9 +190,25 @@ class Month extends React.Component {
         };
         localStorage.setItem("month", JSON.stringify(month));
     }
-    
     get daysLeft() {
         return this.state.workdays - this.state.daysWorked
+    }
+    get totalHoursAllocated() {
+        let totalHoursAllocated = 0
+        this.state.projects.forEach(project => {
+            totalHoursAllocated += project.hoursallocated
+        })
+        return totalHoursAllocated
+    }
+    get totalHoursWorked() {
+        let totalHoursWorked = 0
+        this.state.projects.forEach(project => {
+            totalHoursWorked += project.hoursWorked
+        })
+        return totalHoursWorked
+    }
+    get totalHoursLeft() {
+        return this.totalHoursAllocated - this.totalHoursWorked
     }
     
     handleChange(e, property) {
@@ -210,9 +225,9 @@ class Month extends React.Component {
             () => localStorage.setItem("month", JSON.stringify(this.state))
         )
     }
-    handleHoursAllottedChange(e, i) {
+    handleHoursallocatedChange(e, i) {
         let updatedProjects = this.state.projects.slice()
-        updatedProjects[i].hoursAllotted = e.target.value
+        updatedProjects[i].hoursallocated = parseFloat(e.target.value)
         this.setState(
             {projects: updatedProjects},
             () => localStorage.setItem("month", JSON.stringify(this.state))
@@ -220,13 +235,14 @@ class Month extends React.Component {
     }
     handleHoursWorkedChange(e, i) {
         let updatedProjects = this.state.projects.slice()
-        updatedProjects[i].hoursWorked = e.target.value
+        updatedProjects[i].hoursWorked = parseFloat(e.target.value)
         this.setState(
             {projects: updatedProjects},
             () => localStorage.setItem("month", JSON.stringify(this.state))
         )
     }
     
+    // TODO combine these functions
     handleMoveProjectUp(i) {
         let updatedProjects = [...this.state.projects]
         updatedProjects = moveUp(updatedProjects, i)
@@ -251,7 +267,7 @@ class Month extends React.Component {
     createProject() {
         let updatedProjects = [...this.state.projects, {
             name: "Untitled Project",
-            hoursAllotted: 100,
+            hoursallocated: 100,
             hoursWorked: 5,
             id: Math.random()
         }]
@@ -282,10 +298,10 @@ class Month extends React.Component {
                 workdays={this.state.workdays}
                 daysWorked={this.state.daysWorked}
                 daysLeft={this.daysLeft}
-                // Hours Allotted
-                hoursAllotted={this.state.projects[i].hoursAllotted}
-                onHoursAllottedChange={(e) => {
-                    this.handleHoursAllottedChange(e, i)
+                // Hours allocated
+                hoursallocated={this.state.projects[i].hoursallocated}
+                onHoursallocatedChange={(e) => {
+                    this.handleHoursallocatedChange(e, i)
                 }}
                 // Hours Worked
                 hoursWorked={this.state.projects[i].hoursWorked}
@@ -344,13 +360,20 @@ class Month extends React.Component {
                 </form>
                 <hr />
                 <div className="projects">
-                    <p className="pl">Projects:</p>
+                    <div className="pl">
+                        <p>Projects:</p>
+                        <p>{round(this.totalHoursAllocated)}h allocated</p>
+                        <p>{round(this.totalHoursWorked)}h worked</p>   
+                        <p>{round(this.totalHoursLeft)}h left</p>   
+                        <p>Try to average {round(this.totalHoursLeft / this.daysLeft)}h a day</p>
+                    </div>
+                    
                     {projects}    
                 </div>
                 <button className="create-project" onClick={e => this.createProject()}> + Create Project</button>
             </div>
         );
-    }
+    }    
 }
 
 ReactDOM.render(<Month />, document.getElementById("root"));

@@ -329,9 +329,12 @@ class Month extends React.Component {
         return (
             <div className="month">
                 <form className="month-info">
-                    <p>
-                        March
-                    </p>
+                    <div className="head">
+                        <p className="current-month">March</p>
+                        <a className="text-light" href="https://nortonking.notion.site/Pacer-Resourcing-App-f541175a678a496cb2739f4e533cffca">
+                            v0.3</a>
+                    </div>
+                    
                     <label>
                         Workdays
                         <input

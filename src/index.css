@@ -5,7 +5,7 @@
   --text: #000;
   --text-light: #888;
   --critical: #b00;
-  --border: 2px solid var(--text-light);
+  --border: 2px solid var(--text);
   --padding: 2rem;
   --text-size: 18px
 }
@@ -104,6 +104,10 @@ label * {
   color: var(--critical)
 }
 
+.text-light {
+  color: var(--text-light)
+}
+
 .pl {
   padding-left: var(--padding)
 }
@@ -113,6 +117,13 @@ label * {
   margin: auto;
   padding-bottom: 4rem;
 }
+
+  .head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
   
   .month-info {
     padding: var(--padding);

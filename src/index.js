@@ -12,7 +12,7 @@ function round(number, places = 2) {
     return parseFloat(number.toFixed(places), 10);
 }
 function printMonth() {
-    const month = [
+    const monthsOfTheYear = [
         "January",
         "February",
         "March",
@@ -27,7 +27,7 @@ function printMonth() {
         "December",
     ];
     const d = new Date();
-    let name = month[d.getMonth()];
+    let name = monthsOfTheYear[d.getMonth()];
     return name;
 }
 
@@ -330,7 +330,7 @@ class Month extends React.Component {
             <div className="month">
                 <form className="month-info">
                     <div className="head">
-                        <p className="current-month">March</p>
+                        <p className="current-month">{printMonth()}</p>
                         <a className="text-light" href="https://nortonking.notion.site/Pacer-Resourcing-App-f541175a678a496cb2739f4e533cffca">
                             v0.3</a>
                     </div>
